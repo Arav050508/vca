@@ -3,6 +3,7 @@ const app = express();
 const server = require("http").Server(app);
 app.set("view engine", "ejs");
 app.use(express.static("public"));
+app.use(express.json())
 
 const { v4: uuidv4 } = require("uuid");
 
@@ -19,15 +20,16 @@ const peerServer = ExpressPeerServer(server, {
 
 app.use("/peerjs", peerServer);
 
-var nodemailer = require("nodemailer");
+var nodemailer = require('nodemailer');
+
 const transporter = nodemailer.createTransport({
     port: 465,
     host: "smtp.gmail.com",
     auth: {
         user: 'aravgandhi20@gmail.com',
-        pass: 'xjdzhozfazplpkhm'
+        pass: 'xjdzhozfazplpkhm',
     },
-    secure: true
+    secure: true,
 });
 
 app.get("/", (req, res) => {
@@ -51,9 +53,9 @@ app.post("/send-mail", (req, res) => {
         if (error) {
             return console.log(error);
         }
-        res.status(200).send({message: "Invitation sent!", message_id: info.messageId})
+        res.status(200).send({ message: "Invitation sent!", message_id: info.messageId });
     });
-});
+})
 
 io.on("connection", (socket) => {
     socket.on("join-room", (roomId, userId, userName) => {
